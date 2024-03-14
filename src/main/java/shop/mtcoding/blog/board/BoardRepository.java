@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.user.User;
 
 import java.util.List;
@@ -13,13 +14,21 @@ import java.util.List;
 public class BoardRepository {
     private final EntityManager em;
 
-    public List<Board> findAllV2_v2() {
+    @Transactional
+    public Board save(Board board) {
+        em.persist(board);
+        return board;
+    }
+
+    public List<User> findAllV2_v2() {
         String q1 = "select b from Board b order by b.id desc";
         //lazy로딩하면 망한다. 인쿼리(동적쿼리)로 만들어야 함.
         List<Board> boardList = em.createQuery(q1, Board.class).getResultList();    //애 크기 4
 
         List<Integer> userIds = boardList.stream().mapToInt(board ->
                 board.getUser().getId()).distinct().boxed().toList();
+
+        //-----------------------------------
 
         //boardList가 가지고 있는 유저의 개수만큼 ?를 걸어서 in 쿼리가 나와야함.
         String q = "select u from User u where u.id in (";
@@ -32,13 +41,27 @@ public class BoardRepository {
             }
         }
 
-        //:id에 동적으로 값이 들어가야함!!
+        Query query = em.createQuery(q, User.class);
+        //in 뒤에 들어갈게 board id니까!
+        for (int i = 0; i < userIds.size(); i++) {
+            query.setParameter("id" + i, userIds.get(i));
+        }
 
+        List<User> userList = query.getResultList();
+        System.out.println(userList);
 
-        List<User> userList = em.createQuery(q, User.class).getResultList();   //애 크기 3
+        for (Board b : boardList) {
+            for (int i = 0; i < boardList.size(); i++) {
+                if (userList.get(i).getId() == b.getUser().getId()) {
+                    b.setUser(userList.get(i));
+                }
+            }
+        }
 
-        return boardList; //리턴되는 boardList에는 user가 채워져 있어야 함
-        //stream의 filter 사용
+//        List<User> userList = em.createQuery(q, User.class).getResultList();   //애 크기 3
+
+        return userList; //리턴되는 boardList에는 user가 채워져 있어야 함
+
 
     }
 

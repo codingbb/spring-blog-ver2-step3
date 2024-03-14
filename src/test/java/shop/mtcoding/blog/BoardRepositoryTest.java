@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import shop.mtcoding.blog.board.Board;
 import shop.mtcoding.blog.board.BoardRepository;
+import shop.mtcoding.blog.user.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,13 +17,25 @@ public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
 
+    @Test
+    public void userlist_test() {
+        //given
 
+
+        //when
+        List<User> userList = boardRepository.findAllV2_v2();
+        System.out.println(userList);
+
+        //then
+
+
+    }
 
     //쿼리문을 만들어야함. ? 개수를 정해주는 것! id가 몇 개 들어올지 모르니까!
     @Test
     public void randomquery_test(){
 //        int[] ids = {1, 2, 3, 4};
-        List<Integer> ids = Arrays.asList(1, 2, 3, 4);
+        List<Integer> ids = Arrays.asList(1, 2, 3);
 
         // select u from User u where u.id in (?,?);
         String q = "select u from User u where u.id in (";

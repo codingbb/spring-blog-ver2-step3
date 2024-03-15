@@ -18,6 +18,21 @@ public class BoardRepositoryTest {
     private BoardRepository boardRepository;
 
     @Test
+    public void deleteById_test() {
+        //given
+        int id = 1;
+
+        //when
+        boardRepository.deleteById(id); //delete쿼리 발동함!
+
+        //then
+        System.out.println("deleteById_test : " + boardRepository.findAll().size());
+
+    }
+
+
+
+    @Test
     public void userlist_test() {
         //given
 
@@ -27,8 +42,6 @@ public class BoardRepositoryTest {
         System.out.println(userList);
 
         //then
-
-
     }
 
     //쿼리문을 만들어야함. ? 개수를 정해주는 것! id가 몇 개 들어올지 모르니까!

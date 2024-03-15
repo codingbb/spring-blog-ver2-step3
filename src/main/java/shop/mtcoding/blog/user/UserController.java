@@ -14,6 +14,13 @@ public class UserController {
     private final UserRepository userRepository;
     private final HttpSession session;
 
+    @PostMapping("/join")
+    public String join(UserRequest.JoinDTO requestDTO) {
+        userRepository.save(requestDTO.toEntity());
+        return "redirect:/";
+    }
+
+
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO requestDTO) {
         User sessionUser = userRepository.findByUsernameAndPassword(requestDTO);
@@ -29,6 +36,8 @@ public class UserController {
 
     @GetMapping("/join-form")
     public String joinForm() {
+
+
         return "user/join-form";
     }
 

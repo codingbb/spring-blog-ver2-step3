@@ -1,5 +1,6 @@
 package shop.mtcoding.blog;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,6 +17,28 @@ import java.util.List;
 public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private EntityManager em;
+
+    @Test
+    public void updateById_test() {
+        //given
+
+        int id = 1;
+        String title = "title1";
+        String content = "content1";
+
+        //when
+        boardRepository.updateById(id, title, content);
+        em.flush(); //업데이트가 된 건지 확인이 안 되기 때문에 (트랜젝션 종료 후 쿼리가 날아가서)
+                    //실제 코드는 작성할 필요가 없다. 트랜젝션 종료될 거라!
+                    //em.flush를 꼭 해줘야함!
+
+        //then
+
+    }
+
 
     @Test
     public void deleteById_test() {

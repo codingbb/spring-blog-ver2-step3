@@ -10,6 +10,13 @@ public class BoardRequest {
         private String title;
         private String content;
 
+        @Data
+        public static class UpdateDTO {
+            private String title;
+            private String content;
+
+        }
+
         //이거 save하려면 Entity로 바꿔야함!
         public Board toEntity(User user) {
             return Board.builder()
@@ -20,4 +27,7 @@ public class BoardRequest {
         }
 
     }
+
+
+
 }

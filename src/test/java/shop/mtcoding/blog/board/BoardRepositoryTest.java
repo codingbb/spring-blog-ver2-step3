@@ -1,4 +1,4 @@
-package shop.mtcoding.blog;
+package shop.mtcoding.blog.board;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;

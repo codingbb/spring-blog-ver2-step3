@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/user/update-form")
     public String updateForm(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        User user = userService.회원수정폼(sessionUser.getId());
+        User user = userService.회원조회(sessionUser.getId());
         //User user = userRepository.findById(id);
         request.setAttribute("user", user);
 

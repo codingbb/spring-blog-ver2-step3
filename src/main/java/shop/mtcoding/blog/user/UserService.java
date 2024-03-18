@@ -27,7 +27,7 @@ public class UserService {
     }   //더티체킹
 
 
-    public User 회원수정폼(int id) {
+    public User 회원조회(int id) {
         User user = userJPARepository.findById(id)
                 .orElseThrow(() -> new Exception404("회원정보를 찾을 수 없습니다."));
         return user;

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import shop.mtcoding.blog._core.errs.exception.Exception403;
 import shop.mtcoding.blog._core.errs.exception.Exception404;
 import shop.mtcoding.blog.user.User;
@@ -21,6 +22,15 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardRepository boardRepository;
     private final HttpSession session;
+
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Board board = boardService.글상세보기(id, sessionUser);
+
+        request.setAttribute("board", board);
+        return "board/detail";
+    }
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO requestDTO) {
@@ -42,7 +52,7 @@ public class BoardController {
     @GetMapping("/board/{id}/update-form")
     public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.게시글수정폼(id, sessionUser.getId());
+        Board board = boardService.글조회(id, sessionUser.getId());
         request.setAttribute("board", board);
         return "board/update-form";
     }
@@ -50,13 +60,7 @@ public class BoardController {
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findById(id);
-
-        if (sessionUser.getId() != board.getUser().getId()) {
-            throw new Exception403("게시글을 삭제할 권한이 없습니다");
-        }
-
-        boardRepository.deleteById(id);
+        boardService.글삭제(id, sessionUser.getId());
 
         return "redirect:/";
     }
@@ -64,7 +68,7 @@ public class BoardController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
-        List<Board> boardList = boardRepository.findAll();
+        List<Board> boardList = boardService.글목록조회();
         request.setAttribute("boardList", boardList);
         return "index";
     }
@@ -74,21 +78,17 @@ public class BoardController {
         return "board/save-form";
     }
 
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findByIdJoinUser(id);
+//    @GetMapping("/board/{id}")
+//    public @ResponseBody BoardResponse.DetailDTO detail(@PathVariable Integer id, HttpServletRequest request) {
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+//        return boardService.글상세보기(id, sessionUser);
+//
 
-        // 로그인을 하고 게시글의 주인이면 isOwne가 true가 된다 !
-        boolean isOwner = false;
-        if (sessionUser != null) {
-            if (sessionUser.getId() == board.getUser().getId()) {
-                isOwner = true;
-            }
-        }
-
-        request.setAttribute("isOwner", isOwner);
-        request.setAttribute("board", board);
-        return "board/detail";
+//
+//        request.setAttribute("isOwner", isOwner);
+//        request.setAttribute("board", board);
+//        return "board/detail";
     }
-}
+
+
+

@@ -3,7 +3,7 @@
 <div class="container p-5">
 
 
-    {{#isOwner}}
+    {{#board.isOwner}}
         <!-- 수정삭제버튼 -->
         <div class="d-flex justify-content-end">
             <a href="/board/{{board.id}}/update-form" class="btn btn-warning me-1">수정</a>
@@ -11,7 +11,7 @@
                 <button class="btn btn-danger">삭제</button>
             </form>
         </div>
-    {{/isOwner}}
+    {{/board.isOwner}}
 
 
     <div class="d-flex justify-content-end">

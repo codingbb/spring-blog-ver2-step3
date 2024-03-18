@@ -17,53 +17,46 @@ import shop.mtcoding.blog.board.BoardRepository;
 @RequiredArgsConstructor
 @Controller
 public class UserController {
+
+    private final UserService userService;
     private final UserRepository userRepository;
     private final HttpSession session;
 
-    @PostMapping("/user/update")
-    public String update(UserRequest.UpdateDTO requestDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        userRepository.update(sessionUser.getId(), requestDTO);
-
-        return "redirect:/";
-    }
 
     @GetMapping("/user/update-form")
     public String updateForm(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
-        //id는 세션에서 들고오자!
-        User user = userRepository.findById(sessionUser.getId());
+        User user = userService.회원수정폼(sessionUser.getId());
+        //User user = userRepository.findById(id);
         request.setAttribute("user", user);
 
         return "user/update-form";
     }
 
+
+    @PostMapping("/user/update")
+    public String update(UserRequest.UpdateDTO requestDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User newSessionUser = userService.회원수정(sessionUser.getId(), requestDTO);
+        session.setAttribute("sessionUser", newSessionUser);
+
+        return "redirect:/";
+    }
+
+
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
-        try {
-            userRepository.save(requestDTO.toEntity());
-        } catch (DataIntegrityViolationException e) {
-            throw new Exception400("동일한 유저네임이 존재합니다.");
-        }
+        userService.회원가입(requestDTO);
 
-//        session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
 
 
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO requestDTO) {
-        try {
-            User sessionUser = userRepository.findByUsernameAndPassword(requestDTO);
-            session.setAttribute("sessionUser", sessionUser);
-            return "redirect:/";
-
-        } catch (EmptyResultDataAccessException e) {
-            throw new Exception401("유저네임 혹은 비밀번호가 틀렸어요");
-        }
-
+        User sessionUser = userService.로그인(requestDTO);
+        session.setAttribute("sessionUser", sessionUser);
+        return "redirect:/";
     }
 
 

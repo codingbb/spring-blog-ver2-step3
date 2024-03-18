@@ -18,6 +18,7 @@ import java.util.List;
 @Controller
 public class BoardController {
 
+    private final BoardService boardService;
     private final BoardRepository boardRepository;
     private final HttpSession session;
 
@@ -25,34 +26,23 @@ public class BoardController {
     public String save(BoardRequest.SaveDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         //권한 체크는 생략
-
-        boardRepository.save(requestDTO.toEntity(sessionUser));
+        boardService.글쓰기(requestDTO, sessionUser);
 
         return "redirect:/";
     }
 
 
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable Integer id, BoardRequest.SaveDTO requestDTO) {
+    public String update(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findById(id);
-
-        if (sessionUser.getId() != board.getUser().getId()) {
-            throw new Exception403("게시글을 수정할 권한이 없습니다");
-        }
-
-        boardRepository.updateById(id, requestDTO.getTitle(), requestDTO.getContent());
+        boardService.글수정(id, sessionUser.getId(), requestDTO);
         return "redirect:/board/" + id;
     }
 
     @GetMapping("/board/{id}/update-form")
     public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
-        Board board = boardRepository.findById(id);
-
-        if (board == null) {
-            throw new Exception404("해당 게시글을 찾을 수 없습니다");
-        }
-
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Board board = boardService.게시글수정폼(id, sessionUser.getId());
         request.setAttribute("board", board);
         return "board/update-form";
     }

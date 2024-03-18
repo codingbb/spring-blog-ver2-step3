@@ -28,6 +28,9 @@ public class BoardRequest {
 
     }
 
-
-
+    @Data
+    public class UpdateDTO {
+        private String title;
+        private String content;
+    }
 }

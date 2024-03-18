@@ -66,7 +66,7 @@ public class BoardService {
 
     public List<Board> 글목록조회() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        return boardJPARepository.findAll();
+        return boardJPARepository.findAll(sort);
 
     }
 

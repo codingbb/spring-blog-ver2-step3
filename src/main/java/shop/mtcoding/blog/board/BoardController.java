@@ -29,6 +29,8 @@ public class BoardController {
         Board board = boardService.글상세보기(id, sessionUser);
 
         request.setAttribute("board", board);
+        //이 로고가 찍히면서 레이지 로딩이 될 것임
+        System.out.println("서버 사이드 랜더링 직전에는 Board와 User만 조회된 상태이다~~~~~~");
         return "board/detail";
     }
 

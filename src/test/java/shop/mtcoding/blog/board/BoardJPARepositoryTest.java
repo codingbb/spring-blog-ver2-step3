@@ -19,6 +19,20 @@ public class BoardJPARepositoryTest {
     @Autowired
     private EntityManager em;
 
+    @Test
+    public void findByIdJoinUserAndReplies_test() {
+        //given
+        int id = 4;
+
+        //when
+        //옵셔널이라 오류가 나니까 .get 붙여줌. get는 있으니까 가져와! 라는 말
+        Board boards = boardJPARepository.findByIdJoinUserAndReplies(id).get();
+
+        //then
+
+
+    }
+
     //save
     @Test
     public void save_test() {
@@ -65,12 +79,12 @@ public class BoardJPARepositoryTest {
         int id = 1;
 
         //when
-//        Board board = boardJPARepository.findByIdJoinUser(id);
+        Board board = boardJPARepository.findByIdJoinUser(id).get();
 
-        //then
-//        System.out.println("findByIdJoinUser_test : " + board.getTitle());
-//        System.out.println("findByIdJoinUser_test : " + board.getUser().getUsername());
-//
+      //  then
+        System.out.println("findByIdJoinUser_test : " + board.getTitle());
+        System.out.println("findByIdJoinUser_test : " + board.getUser().getUsername());
+
 
     }
 

@@ -20,12 +20,16 @@ public class BoardController {
     private final HttpSession session;
 
 
-    // TODO : 글 목록조회 API 필요
-    // TODO : 글 상세보기 API 필요
-    // TODO : 글 조회 API 필요
+    // TODO : 글 목록조회 API 필요  ->  @GetMapping("/");
+
+    // TODO : 글 상세보기 API 필요  -> @GetMapping("/api/boards/{id}/detail")
+
+    // TODO : 글 조회 API 필요  ->  @GetMapping("/api/boards/{id}")
+    // 글상세보기 -> 글, 유저 정보, 댓글까지 다 있음
+    // 글조회 -> 글만 조회 하는거라 글 수정할 때 필요
 
 
-    @PostMapping("/board/save")
+    @PostMapping("/api/boards")
     public String save(BoardRequest.SaveDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         //권한 체크는 생략
@@ -35,7 +39,7 @@ public class BoardController {
     }
 
 
-    @PostMapping("/board/{id}/update")
+    @PutMapping("/api/boards/{id}")
     public String update(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         boardService.글수정(id, sessionUser.getId(), requestDTO);
@@ -43,7 +47,7 @@ public class BoardController {
     }
 
 
-    @PostMapping("/board/{id}/delete")
+    @DeleteMapping("/api/boards/{id}")
     public String delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         boardService.글삭제(id, sessionUser.getId());

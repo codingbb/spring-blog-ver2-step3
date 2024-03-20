@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errs.exception.Exception403;
 import shop.mtcoding.blog._core.errs.exception.Exception404;
 import shop.mtcoding.blog.user.User;
@@ -20,19 +17,13 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-    private final BoardRepository boardRepository;
     private final HttpSession session;
 
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.글상세보기(id, sessionUser);
 
-        request.setAttribute("board", board);
-        //이 로고가 찍히면서 레이지 로딩이 될 것임
-        System.out.println("서버 사이드 랜더링 직전에는 Board와 User만 조회된 상태이다~~~~~~");
-        return "board/detail";
-    }
+    // TODO : 글 목록조회 API 필요
+    // TODO : 글 상세보기 API 필요
+    // TODO : 글 조회 API 필요
+
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO requestDTO) {
@@ -51,13 +42,6 @@ public class BoardController {
         return "redirect:/board/" + id;
     }
 
-    @GetMapping("/board/{id}/update-form")
-    public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.글조회(id, sessionUser.getId());
-        request.setAttribute("board", board);
-        return "board/update-form";
-    }
 
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id) {
@@ -65,19 +49,6 @@ public class BoardController {
         boardService.글삭제(id, sessionUser.getId());
 
         return "redirect:/";
-    }
-
-
-    @GetMapping("/")
-    public String index(HttpServletRequest request) {
-        List<Board> boardList = boardService.글목록조회();
-        request.setAttribute("boardList", boardList);
-        return "index";
-    }
-
-    @GetMapping("/board/save-form")
-    public String saveForm() {
-        return "board/save-form";
     }
 
 //    @GetMapping("/board/{id}")

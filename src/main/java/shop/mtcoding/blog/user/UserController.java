@@ -19,19 +19,11 @@ import shop.mtcoding.blog.board.BoardRepository;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
     private final HttpSession session;
 
 
-    @GetMapping("/user/update-form")
-    public String updateForm(HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User user = userService.회원조회(sessionUser.getId());
-        //User user = userRepository.findById(id);
-        request.setAttribute("user", user);
+    // TODO: 회원정보 조회 API 필요
 
-        return "user/update-form";
-    }
 
 
     @PostMapping("/user/update")
@@ -58,21 +50,6 @@ public class UserController {
         session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
-
-
-    @GetMapping("/join-form")
-    public String joinForm() {
-
-
-        return "user/join-form";
-    }
-
-    @GetMapping("/login-form")
-    public String loginForm() {
-        return "user/login-form";
-    }
-
-
 
     @GetMapping("/logout")
     public String logout() {

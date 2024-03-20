@@ -27,10 +27,10 @@ public class UserService {
     }   //더티체킹
 
 
-    public User 회원조회(int id) {
+    public UserResponse.DTO 회원조회(int id) {
         User user = userJPARepository.findById(id)
                 .orElseThrow(() -> new Exception404("회원정보를 찾을 수 없습니다."));
-        return user;
+        return new UserResponse.DTO(user); //엔티티 생명 종료
 
     }
 
@@ -47,7 +47,7 @@ public class UserService {
 
 
     @Transactional
-    public void 회원가입(UserRequest.JoinDTO requestDTO) {
+    public User 회원가입(UserRequest.JoinDTO requestDTO) {
         // 1. 유효성 검사 -> 컨트롤러 책임 x
 
         // 2. 유저네임 중복검사 (서비스 체크) - DB연결 필요
@@ -59,7 +59,7 @@ public class UserService {
         }
 
 
-        userJPARepository.save(requestDTO.toEntity());
+        return userJPARepository.save(requestDTO.toEntity());
     }
 
 }

@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import shop.mtcoding.blog.user.User;
-import shop.mtcoding.blog.user.UserRepository;
-import shop.mtcoding.blog.user.UserRequest;
 
 @Import(UserRepository.class)   //IoC 등록 코드
 @DataJpaTest    //Datasource/(connection pool), EntityManager

@@ -12,37 +12,50 @@ import java.sql.Timestamp;
 public class BoardResponse {
 
     @Data
-    public static class DetailDTO {
-        private Integer id;
+    public static class MainDTO {
+        private int id;
         private String title;
-        private String content;
-        private UserDTO user;
-        private Boolean isOwner;
 
-        public DetailDTO(Board board, User sessionUser) {
+        //여기서 getget 거리면 여기서 레이지 로딩이 됨
+        public MainDTO(Board board) {
             this.id = board.getId();
             this.title = board.getTitle();
-            this.content = board.getContent();
-            this.user = new UserDTO(board.getUser());
-
-            this.isOwner = false;
-            if(sessionUser != null){
-                if(sessionUser.getId() == board.getUser().getId()){
-                    isOwner = true;
-                }
-            }
-
-        }
-
-        @Data
-        public class UserDTO {
-            private int id;
-            private String username;
-
-            public UserDTO(User user) {
-                this.id = user.getId();
-                this.username = user.getUsername();
-            }
         }
     }
+
+
+//    @Data
+//    public static class DetailDTO {
+//        private Integer id;
+//        private String title;
+//        private String content;
+//        private UserDTO user;
+//        private Boolean isOwner;
+//
+//        public DetailDTO(Board board, User sessionUser) {
+//            this.id = board.getId();
+//            this.title = board.getTitle();
+//            this.content = board.getContent();
+//            this.user = new UserDTO(board.getUser());
+//
+//            this.isOwner = false;
+//            if(sessionUser != null){
+//                if(sessionUser.getId() == board.getUser().getId()){
+//                    isOwner = true;
+//                }
+//            }
+//
+//        }
+//
+//        @Data
+//        public class UserDTO {
+//            private int id;
+//            private String username;
+//
+//            public UserDTO(User user) {
+//                this.id = user.getId();
+//                this.username = user.getUsername();
+//            }
+//        }
+//    }
 }
